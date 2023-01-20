@@ -7,24 +7,86 @@
 </head>
 
 <body>
-  <input id="cardnumber"></input>
+  <!-- onkeypress: Llame a una función cuando el usuario presiona una tecla: -->
+  <input id="cardnumber" type="text" maxlength="13" onkeypress="ValidaSoloNumeros()"></input>
   <button onclick="validate()">Validar</button>
   <div id="result"></div>
+
+
   <script lang="javascript">
+    //Función que permite solo Números
+    // evento de teclado
+    //keyCode: Obtiene el valor de la tecla del teclado presionada
+    function ValidaSoloNumeros() {
+      if ((event.keyCode < 48) || (event.keyCode > 57))
+        event.returnValue = false;
+    }
+
     function validate() {
-      const valid = isValid(document.getElementById("cardnumber").value)
+      const valid = isValid(document.getElementById("cardnumber").value);
+      console.log("valid: " + valid);
       if (valid) {
+        var exito = "El numero de tarjeta " + document.getElementById("cardnumber").value + " es valida!"
         // Show success in div#result
+        document.getElementById("result").innerHTML = exito;
       }
       else {
+        var error = "El numero de tarjeta  es invalida!"
+        document.getElementById("result").innerHTML = error;
         // Show error message in div#result
       }
     }
 
-    function isValid(creditCardNumber){
+    function isValid(creditCardNumber) {
       // is creditCardNumber valid?
+
+      //split: devuelve un array//
+      split = creditCardNumber.split('');
+      console.log("split: " + split);
+      //reverse: //
+      let reverse = split.reverse();
+      console.log("reverse: " + reverse);
+      //segundoDigtoDoblado por 2
+      let doblado = []
+      for (let i = 0; i < reverse.length; i++) {
+        if (i % 2 != 0) {//i=1
+          digtoDoblado = reverse[i] * 2
+
+          doblado.push(digtoDoblado)
+
+        } else {
+          doblado.push(reverse[i])
+        }
+        console.log("doblado:  " + doblado);
+      }
+      //suma de digitos doblados
+      var digitosSumados = []
+      for (let i = 0; i < doblado.length; i++) {
+        if (doblado[i] > 9) {
+          let digitos = doblado[i];
+          arrDigito = digitos.toString().split('')//de numero a string a objArr
+          let sumarDigitos = 0;
+          for (let k = 0; k < arrDigito.length; k++) {
+            sumarDigitos += parseInt(arrDigito[k]);//devuelve numero 
+          }
+          // sumarDigitosString = sumarDigitos.toString()//de numero a string 
+          digitosSumados.push(sumarDigitos)
+          console.log("A: " + typeof sumarDigitos);
+        } else {
+          digitosSumados.push(doblado[i])
+          console.log("B: " + typeof doblado[i]);
+        }
+        //return digitosSumados       
+      }
+      //suma final
+      sumaFinal = digitosSumados.reduce((a, b) => parseInt(a) + parseInt(b))
+      console.log("sumaFinal: " + sumaFinal);
+      if (sumaFinal % 10 == 0) {
+        return true
+      }
       return false
     }
+
   </script>
 </body>
 
